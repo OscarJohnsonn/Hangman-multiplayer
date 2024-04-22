@@ -1,0 +1,238 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+
+body{
+  font-family: "DM Serif Display", serif;
+  background-color: #F7DCB9;
+}
+h1{
+  font-size: 8rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+#gamemode{
+  font-size: 2rem;
+
+  margin-top: 2rem;
+  position: fixed;
+
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+
+}
+.switch {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10rem;
+  height: 4.5rem;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 4rem;
+  width: 4rem;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #B5C18E;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #B5C18E;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(5.5rem);
+  -ms-transform: translateX(5.5rem);
+  transform: translateX(5.5rem);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+#drop{
+
+    width: 10%;
+    padding: 10px;
+    border: 0.5rem solid #000000;
+    border-radius: 1.5rem;
+    position: fixed;
+    bottom: 0.5%;
+    right: 0.5%;
+    height: 10%;
+    transition: 0.5s;
+}
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload img {
+    height: 50px;
+    width: auto;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+#time {
+  position: fixed;
+  top: 2%;
+  right: 2%;
+  font-size: 2rem;
+}
+#activerooms{
+  position: fixed;
+  bottom: 30%;
+  left: 0.5%;
+  font-size: 2rem;
+  border: 0.5rem solid #000000;
+  border-radius: 1.5rem;
+  height: 50%;
+  width: 10%;
+  display: none;
+  transition: 0.5s;
+}
+#status{
+  text-align: center;
+  position: fixed;
+
+  font-size: 2rem;
+  border: 0.5rem solid #000000;
+  border-radius: 1.5rem;
+  bottom: 0.5%;
+  right: 0.5%;
+  height: 10%;
+  display: none;
+  width: 10%;
+  transition: 0.5s;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#buttons button{
+  background-color: #B99470;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 2rem;
+  width: 15rem; /* copied from .switch */
+  height: 4.5rem; /* copied from .switch */
+  border-radius: 34px; /* copied from .slider.round */
+  font-family: "DM Serif Display", serif;
+  margin: 10px 10px 20px 10px; /* Adjust this line */
+  transition: 0.3s;
+}
+#buttons button:hover{
+  background-color: #B5C18E;
+  transition: 0.3s;
+}
+#joinbtn{
+  display: none;
+
+}
+#userid{
+  text-align: center;
+  position: fixed;
+
+  font-size: 2rem;
+  border: 0.5rem solid #000000;
+  border-radius: 1.5rem;
+  bottom: 0.5%;
+  left: 0.5%;
+  height: 5%;
+  display: none;
+  width: 10%;
+  transition: 0.5s;
+}
+#username{
+  text-align: center;
+  position: fixed;
+
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  border: 0.5rem solid #000000;
+  border-radius: 1.5rem;
+
+  height: 5%;
+
+  width: 10%;
+  transition: 0.5s;
+}
+#roomcodeinput{
+  text-align: center;
+  position: fixed;
+
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  border: 0.5rem solid #000000;
+  border-radius: 1.5rem;
+
+  height: 5%;
+
+  width: 10%;
+  transition: 0.5s;
+  display: none;
+}

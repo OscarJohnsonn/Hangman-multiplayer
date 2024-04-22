@@ -1,0 +1,31 @@
+<!-- game.html -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+    var socket = io();
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var testData = input.value;
+
+        // Emitting new score event with the extracted username and test data
+        socket.emit('new score', { username: username, score: testData });
+
+        input.value = '';
+    });
+
+    socket.on('new score', function (data) {
+        var leaderBoard = document.getElementById('leaderboard');
+        var item = document.createElement('li');
+        item.textContent = `${data.username}: ${data.score}`;
+        leaderBoard.appendChild(item);
+    });
+
+  
+</script>
+
+<iframe src="/leaderboard.html"></iframe>
