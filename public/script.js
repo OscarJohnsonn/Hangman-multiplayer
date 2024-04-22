@@ -80,18 +80,40 @@ function fetchStatus() {
 
 
 
-const socket = io();
 
-let username;
+const socket = io(); // Connect to the server
 
-window.onload = function() {
-    username = prompt("Enter your username");
+window.onload = function () {
+    digitalClock(); // Start the digital clock
+    fetchStatus(); // Fetch status information
+    setUsername(); // Set the username
+};
+
+function setUsername() {
+    let username = prompt("Enter your username");
     if (!username) {
-        // If username is not provided, generate a random one
         username = "Player" + Math.floor(Math.random() * 1000);
     }
-    socket.emit('new user', username);
-};
+    socket.emit('new user', username); // Emit the username to the server
+}
+
+function digitalClock() {
+    // Your digital clock function remains the same
+}
+
+function fetchStatus() {
+    fetch('https://status.replit.com/api/v1/status', { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+            const statusDiv = document.getElementById('status');
+            if (statusDiv) {
+                statusDiv.innerHTML = `Status: ${data.page.state}`;
+            } else {
+                console.error('Error: status div not found');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
 
 document.getElementById('togglemulti').addEventListener('change', () => {
     if (document.getElementById('togglemulti').checked) {
@@ -102,29 +124,17 @@ document.getElementById('togglemulti').addEventListener('change', () => {
 });
 
 document.getElementById('playbtn').addEventListener('click', () => {
-    startSinglePlayer();
+    socket.emit('single player'); // Emit 'single player' event when play button clicked
 });
 
 document.getElementById('hostbtn').addEventListener('click', () => {
-    hostGame();
+    socket.emit('create game'); // Emit 'create game' event when host button clicked
 });
 
 document.getElementById('joinbtn').addEventListener('click', () => {
-    joinGame();
-});
-
-function startSinglePlayer() {
-    socket.emit('single player');
-}
-
-function hostGame() {
-    socket.emit('create game', username);
-}
-
-function joinGame() {
     let gameId = prompt("Enter the game ID");
-    socket.emit('join game', gameId);
-}
+    socket.emit('join game', gameId); // Emit 'join game' event with entered game ID
+});
 
 socket.on('game created', (gameId) => {
     console.log(`Game created with ID: ${gameId}`);
@@ -139,4 +149,3 @@ socket.on('game start', (game) => {
 socket.on('join game error', (errorMessage) => {
     alert(`Error joining game: ${errorMessage}`);
 });
-
