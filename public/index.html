@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <link rel="stylesheet" href="index.css">
-    <script src="index.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="script.js"></script>
+
 </head>
 <body onload="digitalClock()">
     <h1 id="title">Hangman</h1>
@@ -31,24 +33,24 @@
 
     <div id="buttons">
         <div id="Join">
-            <button id="joinbtn">Join a game</button>
+            <button id="joinbtn" onclick="joinGame()">Join a game</button>
         </div>
         <div id="Play">
-            <button id="playbtn">Play</button>
+            <button id="playbtn" onclick="startSinglePlayer()">Play</button>
         </div>
         <div id="Host">
-            <button id="hostbtn">Host a game</button>
+            <button id="hostbtn" onclick="hostGame()">Host a game</button>
         </div>
-
     </div>
-
+    
 
     <div id="multielements">
         <div id="status">Status Unavailable</div>
         <div id="activerooms">test</div>
-        <div id="userid"></div>
+        <div id="socketid"></div>
         <div id="roomcodeinputdiv"><input id="roomcodeinput" type="text" placeholder="Room Code"></div>
         
     </div>
+
 </body>
 </html>
