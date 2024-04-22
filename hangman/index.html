@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="index.css">
+    <script src="index.js"></script>
+</head>
+<body>
+    <h1 id="title">Hangman</h1>
+    <h2 id="gamemode">Single Player</h2>
+    <label class="switch">
+        <input id="togglemulti" type="checkbox" onchange="togglemulti()">
+        <span class="slider round"></span>
+    </label>
+    <div id="drop" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div id="uploadset">
+            <label for="file-upload" class="custom-file-upload">
+                <img src="upload.png" alt="upload icon" class="center">
+            </label>
+            <input id="file-upload" type="file" />
+        </div>
+    </div> 
+
+    <div id="multielements">
+        
+    </div>
+</body>
+</html>
