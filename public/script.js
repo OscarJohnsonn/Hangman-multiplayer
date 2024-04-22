@@ -81,7 +81,15 @@ function fetchStatus() {
 
 
 
-const socket = io(); // Connect to the server
+window.onload = function () {
+    digitalClock(); // Start the digital clock
+    fetchStatus(); // Fetch status information
+    setUsername(); // Set the username
+};
+
+// Client-side code (script.js)
+
+const socket = io();
 
 window.onload = function () {
     digitalClock(); // Start the digital clock
@@ -90,62 +98,28 @@ window.onload = function () {
 };
 
 function setUsername() {
-    let username = prompt("Enter your username");
-    if (!username) {
-        username = "Player" + Math.floor(Math.random() * 1000);
-    }
-    socket.emit('new user', username); // Emit the username to the server
+    const username = document.getElementById('username').value;
+    socket.emit('setUsername', username);
 }
 
-function digitalClock() {
-    // Your digital clock function remains the same
+function selectGameMode() {
+    const mode = document.getElementById('togglemulti').checked ? 'multiplayer' : 'singleplayer';
+    socket.emit('selectGameMode', mode);
 }
 
-function fetchStatus() {
-    fetch('https://status.replit.com/api/v1/status', { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            const statusDiv = document.getElementById('status');
-            if (statusDiv) {
-                statusDiv.innerHTML = `Status: ${data.page.state}`;
-            } else {
-                console.error('Error: status div not found');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+function hostGame() {
+    socket.emit('hostGame');
 }
 
-document.getElementById('togglemulti').addEventListener('change', () => {
-    if (document.getElementById('togglemulti').checked) {
-        document.getElementById('gamemode').innerText = 'Battle Royale';
-    } else {
-        document.getElementById('gamemode').innerText = 'Single Player';
-    }
-});
+function joinGame() {
+    const roomCode = document.getElementById('roomcodeinput').value;
+    socket.emit('joinGame', roomCode);
+}
 
-document.getElementById('playbtn').addEventListener('click', () => {
-    socket.emit('single player'); // Emit 'single player' event when play button clicked
-});
+function startSinglePlayer() {
+    socket.emit('startSinglePlayer');
+}
 
-document.getElementById('hostbtn').addEventListener('click', () => {
-    socket.emit('create game'); // Emit 'create game' event when host button clicked
-});
-
-document.getElementById('joinbtn').addEventListener('click', () => {
-    let gameId = prompt("Enter the game ID");
-    socket.emit('join game', gameId); // Emit 'join game' event with entered game ID
-});
-
-socket.on('game created', (gameId) => {
-    console.log(`Game created with ID: ${gameId}`);
-    // Handle UI updates or navigation as needed
-});
-
-socket.on('game start', (game) => {
-    console.log(`Game started with players: ${game.players[0].username} and ${game.players[1].username}`);
-    // Handle UI updates or navigation as needed
-});
-
-socket.on('join game error', (errorMessage) => {
-    alert(`Error joining game: ${errorMessage}`);
+socket.on('redirect', (destination) => {
+    window.location.href = destination;
 });

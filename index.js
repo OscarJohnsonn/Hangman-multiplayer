@@ -1,94 +1,56 @@
 const express = require('express');
 const http = require('http');
-const socketIO = require('socket.io');
-const path = require('path'); // Required for resolving file paths
+const socketIo = require('socket.io');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIo(server);
 
-let games = {};
-let users = {};
+const PORT = process.env.PORT || 3000;
 
-// Serve static files from the 'public' directory
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Socket.io logic
 io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('A user connected:', socket.id);
 
-    // Store user with their unique id (socket.id) and username
-    socket.on('new user', (username) => {
-        users[socket.id] = username;
-        console.log('new user:', username);
+    // Handle setting username
+    socket.on('setUsername', (username) => {
+        socket.username = username;
     });
 
-    // Disconnect user if they decide to play single player
-    socket.on('single player', () => {
-        socket.disconnect();
-        console.log('single player:', socket.id);
+    // Handle selecting game mode
+    socket.on('selectGameMode', (mode) => {
+        socket.gamemode = mode;
     });
 
-    socket.on('create game', (username) => {
-        let gameId = generateGameId();
-        games[gameId] = new Game(username, socket.id);
-        socket.join(gameId);
-        socket.emit('game created', gameId);
-        console.log('create game:', gameId);
+    // Handle hosting a game
+    socket.on('hostGame', () => {
+        // Generate a unique room code (for simplicity, you can use a library like shortid)
+        const roomCode = 'ABC123'; // Replace with actual room code generation logic
+        socket.join(roomCode);
+        socket.emit('redirect', `host.html?room=${roomCode}`);
     });
 
-    socket.on('join game', (gameId) => {
-        let game = games[gameId];
-        if (game) {
-            let success = game.addPlayer(users[socket.id], socket.id);
-            if (success) {
-                socket.join(gameId);
-                io.to(gameId).emit('game start', game);
-                console.log('join game:', gameId);
-            } else {
-                socket.emit('join game error', 'Game is full');
-                console.log('join game error: Game is full');
-            }
-        } else {
-            socket.emit('join game error', 'Game not found');
-            console.log('join game error: Game not found');
-        }
+    // Handle joining a game
+    socket.on('joinGame', (roomCode) => {
+        socket.join(roomCode);
+        socket.emit('redirect', `game.html?room=${roomCode}`);
     });
 
-    socket.on('game over', (gameId) => {
-        delete games[gameId];
-        io.to(gameId).emit('game over');
-        console.log('game over:', gameId);
+    // Handle single player game
+    socket.on('startSinglePlayer', () => {
+        socket.emit('redirect', 'singleplayer.html');
     });
 
-    // Move this inside the 'connection' event callback
-    socket.on('redirect', (url) => {
-        socket.emit('redirect', url);
-        console.log('redirect:', url);
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
     });
-
-    // Additional event handling can be added here as needed...
 });
 
-server.listen(3000, () => {
-    console.log('Server is running on port 3000');
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
-
-function generateGameId() {
-    return Math.random().toString(36).substring(2, 15);
-}
-
-class Game {
-    constructor(player1, socketId1) {
-        this.players = [{ username: player1, socketId: socketId1 }];
-        // You can initialize game state here if needed
-    }
-
-    addPlayer(player, socketId) {
-        if (this.players.length < 100) {
-            this.players.push({ username: player, socketId: socketId });
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
