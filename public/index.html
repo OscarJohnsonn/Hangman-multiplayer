@@ -8,7 +8,16 @@
     <input id="username" type="text" placeholder="Username">
     <input id="room" type="text" placeholder="Room">
     <button id="join">Join Room</button>
+
+    <!-- Form for making a guess -->
+    <form id="guess">
+        <input id="letter" type="text" placeholder="Guess a letter" maxlength="1">
+        <button type="submit">Guess</button>
+    </form>
+    <div id="guessedLetters"></div>
+    <div id="word"></div>
     <div id="scores"></div>
     <script src="client.js"></script>
-</body>
+
+    <a href="rooms.html" class="button">Rooms</a></body>
 </html>
